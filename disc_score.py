@@ -22,7 +22,7 @@ def discrepancy_score(subordinate_variable, supervisor_variable, method):
     elif method == "simple_difference":
         discrepancy_score = np.mean(subordinate_variable - supervisor_variable)
     elif method == "percent_non_match":
-        discrepancy_score = (subordinate_variable != supervisor_variable) / len(subordinate_variable) * 100
+        discrepancy_score = np.sum(subordinate_variable != supervisor_variable) / len(subordinate_variable) * 100
     else:
         raise ValueError("The method must be one of the following: percent_difference, absolute_difference, absolute_percent_difference, simple_difference, or percent_non_match.")
     
