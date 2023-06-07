@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 def discrepancy_score(subordinate_variable, supervisor_variable, method):
     """Calculates the discrepancy score between two variables."""
@@ -29,4 +31,21 @@ def discrepancy_score(subordinate_variable, supervisor_variable, method):
     return discrepancy_score
 
 
+def bootstrap_distribution(subordinate_variable, supervisor_variable, method, n_iterations = 100000):
+    """Generates a distribution of discrepancy scores between the two variables using bootstrapping."""
+        
+    n = len(subordinate_variable)
+    discrepancy_scores = []
+    for i in tqdm(range(n_iterations)):
+        indices = np.random.choice(range(n), size=n, replace=True)
+        random_sample_sub = list(subordinate_variable[indices])
+        random_sample_sup = list(supervisor_variable[indices])
+        discrepancy_scores.append(discrepancy_score(random_sample_sub, random_sample_sup, method))
+    
+    plt.hist(discrepancy_scores)
+    plt.show()
+    plt.xlabel("Discrepancy Score")
+    plt.ylabel("Frequency")
+    plt.title("Bootstrap Distribution of Discrepancy Scores")
 
+    return discrepancy_scores
