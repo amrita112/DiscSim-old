@@ -9,7 +9,7 @@ def discrepancy_score(subordinate_variable, supervisor_variable, method):
         raise ValueError("The two variables must be the same length.")
     
     # Step 2: check that the two variables are the same type
-    if type(subordinate_variable) != type(supervisor_variable):
+    if type(subordinate_variable[0]) != type(supervisor_variable[0]):
         raise TypeError("The two variables must be the same type.")
     
     # Step 3: calculate the discrepancy score
