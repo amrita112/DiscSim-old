@@ -36,14 +36,18 @@ def bootstrap_distribution(subordinate_variable, supervisor_variable, method, n_
         
     n = len(subordinate_variable)
     discrepancy_scores = []
+
     for i in tqdm(range(n_iterations)):
         indices = np.random.choice(range(n), size=n, replace=True)
-        random_sample_sub = list(subordinate_variable[indices])
-        random_sample_sup = list(supervisor_variable[indices])
+        random_sample_sub = np.array([subordinate_variable[j] for j in indices])
+        random_sample_sup = np.array([supervisor_variable[j] for j in indices])
+
         discrepancy_scores.append(discrepancy_score(random_sample_sub, random_sample_sup, method))
-    
-    plt.hist(discrepancy_scores)
-    plt.show()
+        
+    real_discrepancy_score = discrepancy_score(subordinate_variable, supervisor_variable, method)
+   
+    plt.hist(discrepancy_scores, color = 'gray', edgecolor = 'black')
+    plt.axvline(real_discrepancy_score, color='r', linestyle='dashed', linewidth=2)
     plt.xlabel("Discrepancy Score")
     plt.ylabel("Frequency")
     plt.title("Bootstrap Distribution of Discrepancy Scores")
