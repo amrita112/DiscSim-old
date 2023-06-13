@@ -31,7 +31,7 @@ def discrepancy_score(subordinate_variable, supervisor_variable, method):
     return discrepancy_score
 
 
-def bootstrap_distribution(subordinate_variable, supervisor_variable, method, n_iterations = 100000):
+def bootstrap_distribution(subordinate_variable, supervisor_variable, method, n_iterations = 100000, ax = None):
     """Generates a distribution of discrepancy scores between the two variables using bootstrapping."""
         
     n = len(subordinate_variable)
@@ -45,11 +45,47 @@ def bootstrap_distribution(subordinate_variable, supervisor_variable, method, n_
         discrepancy_scores.append(discrepancy_score(random_sample_sub, random_sample_sup, method))
         
     real_discrepancy_score = discrepancy_score(subordinate_variable, supervisor_variable, method)
-   
-    plt.hist(discrepancy_scores, color = 'gray', edgecolor = 'black')
-    plt.axvline(real_discrepancy_score, color='r', linestyle='dashed', linewidth=2)
-    plt.xlabel("Discrepancy Score")
-    plt.ylabel("Frequency")
-    plt.title("Bootstrap Distribution of Discrepancy Scores")
+    
+    if ax is None:
+        fig, ax = plt.subplots()
+    ax.hist(discrepancy_scores, color = 'gray', edgecolor = 'black')
+    ax.axvline(real_discrepancy_score, color='r', linestyle='dashed', linewidth=2)
+    ax.set_xlabel("Discrepancy Score")
+    ax.set_ylabel("Frequency")
+    ax.set_title("Bootstrap Distribution of Discrepancy Scores")
 
     return discrepancy_scores
+
+def shuffle_distribution(subordinate_variable, supervisor_variable, method, n_iterations = 100000, ax = None):
+    """Generates a null distribution of discrepancy scores between the two variables 
+    by shuffling indices of the supervisor variable."""
+        
+    n = len(subordinate_variable)
+    discrepancy_scores = []
+    subordinate_variable_array = np.array([subordinate_variable[j] for j in range(n)])
+
+    for i in tqdm(range(n_iterations)):
+        indices = np.random.choice(range(n), size=n, replace=False)
+        random_sample_sup = np.array([supervisor_variable[j] for j in indices])
+
+        discrepancy_scores.append(discrepancy_score(subordinate_variable_array, random_sample_sup, method))
+        
+    real_discrepancy_score = discrepancy_score(subordinate_variable, supervisor_variable, method)
+    
+    if ax is None:
+        fig, ax = plt.subplots()
+    ax.hist(discrepancy_scores, color = 'gray', edgecolor = 'black')
+    ax.axvline(real_discrepancy_score, color='r', linestyle='dashed', linewidth=2)
+    ax.set_xlabel("Discrepancy Score")
+    ax.set_ylabel("Frequency")
+    ax.set_title("Shuffled Null Distribution of Discrepancy Scores")
+
+    return discrepancy_scores
+
+def p_value(shuffle_distribution, real_value):
+    """Calculates the p-value of the real discrepancy score: 
+    the proportion of samples in the shuffled distribution that are less than the real discrepancy score."""
+    
+    p_value = sum(shuffle_distribution <= real_value) / len(shuffle_distribution)
+    
+    return p_value
