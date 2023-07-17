@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import binom
 
-def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9, tolerance = 0.001, n_high = 10000, n_low = 2):
+def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9, tolerance = 0.001, n_high = 10000, n_low = 2, suppress_warnings = False):
     
     '''
     Return the number of samples required to accurately estimate discrepancy scores for discrete variables.
@@ -24,10 +24,12 @@ def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9,
     p_low_red = 1 - binom.cdf(int(t_red*n_low), n_low, t_red + accuracy)
     
     if not np.logical_and(p_high_green > confidence, p_high_red > confidence):
-        print('Increase n_high')
+        if not suppress_warnings:
+            print('Increase n_high')
         return
     if not np.logical_and(p_low_green < confidence, p_low_red < confidence):
-        print('Decrease n_low')
+        if not suppress_warnings:
+            print('Decrease n_low')
         return
 
     while np.logical_and(np.logical_or(np.abs(confidence - p_high_green) > tolerance,
