@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import binom
 
-def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9, tolerance = 0.001, n_high = 10000, n_low = 1):
+def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9, tolerance = 0.001, n_high = 10000, n_low = 2):
     
     '''
     Return the number of samples required to accurately estimate discrepancy scores for discrete variables.
@@ -22,36 +22,36 @@ def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9,
 
     p_high_red = 1 - binom.cdf(int(t_red*n_high), n_high, t_red + accuracy)
     p_low_red = 1 - binom.cdf(int(t_red*n_low), n_low, t_red + accuracy)
-
-    while np.logical_or(p_high1 > p, p_high_red > p):
     
-        if p_low1 > p:
-            if p_low_red > p:
-                n_high = n_low
-                n_low = int(n_low/2)
-            else:
-                n_high = int((n_high + n_low)/2)
-        else:
-            n_high = int((n_high + n_low)/2)
+    if not np.logical_and(p_high_green > confidence, p_high_red > confidence):
+        print('Increase n_high')
+        return
+    if not np.logical_and(p_low_green < confidence, p_low_red < confidence):
+        print('Decrease n_low')
+        return
 
-        p_high1 = binom.cdf(int(t_green*n_high), n_high, t_green - accuracy)
-        p_low1 = binom.cdf(int(t_green*n_low), n_low, t_green - accuracy)
+    while np.logical_and(np.logical_or(np.abs(confidence - p_high_green) > tolerance,
+                                       np.abs(confidence - p_high_red) > tolerance), 
+                         np.abs(n_high - n_low) > 1):
+    
+        n_mid = int((n_high + n_low)/2)
+        
+        p_mid_green = binom.cdf(int(t_green*n_mid), n_mid, t_green - accuracy)
+        p_mid_red = 1 - binom.cdf(int(t_red*n_mid), n_mid, t_red + accuracy)
 
-        p_high_red = 1 - binom.cdf(int(t_red*n_high), n_high, t_red + accuracy)
-        p_low_red = 1 - binom.cdf(int(t_red*n_low), n_low, t_red + accuracy)
-
-        if np.logical_and(p_high1 < p, p_high_red < p):
-            n_low = n_high
-            n_high = int(2*n_high)
-
-            p_high1 = binom.cdf(int(t_green*n_high), n_high, t_green - accuracy)
-            p_low1 = binom.cdf(int(t_green*n_low), n_low, t_green - accuracy)
-
-            p_high_red = 1 - binom.cdf(int(t_red*n_high), n_high, t_red + accuracy)
+        if np.logical_or(p_mid_green <= confidence - tolerance, p_mid_red <= confidence - tolerance):
+            n_low = n_mid
+            p_low_green = binom.cdf(int(t_green*n_low), n_low, t_green - accuracy)
             p_low_red = 1 - binom.cdf(int(t_red*n_low), n_low, t_red + accuracy)
-
-        if np.logical_or(p_high1 <= p - tolerance, p_high_red <= p - tolerance):
-            break
+        else:
+            n_high = n_mid
+            p_high_green = binom.cdf(int(t_green*n_high), n_high, t_green - accuracy)
+            p_high_red = 1 - binom.cdf(int(t_red*n_high), n_high, t_red + accuracy)
+    
+    return n_high
     
     
+def schematic(t_green, t_red, accuracy, confidence, n):
+    
+    plt.figure()
     
