@@ -25,33 +25,33 @@ def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9,
 
     while np.logical_or(p_high1 > p, p_high_red > p):
     
-    if p_low1 > p:
-        if p_low_red > p:
-            n_high = n_low
-            n_low = int(n_low/2)
+        if p_low1 > p:
+            if p_low_red > p:
+                n_high = n_low
+                n_low = int(n_low/2)
+            else:
+                n_high = int((n_high + n_low)/2)
         else:
             n_high = int((n_high + n_low)/2)
-    else:
-        n_high = int((n_high + n_low)/2)
-        
-    p_high1 = binom.cdf(int(t_green*n_high), n_high, t_green - accuracy)
-    p_low1 = binom.cdf(int(t_green*n_low), n_low, t_green - accuracy)
 
-    p_high_red = 1 - binom.cdf(int(t_red*n_high), n_high, t_red + accuracy)
-    p_low_red = 1 - binom.cdf(int(t_red*n_low), n_low, t_red + accuracy)
-    
-    if np.logical_and(p_high1 < p, p_high_red < p):
-        n_low = n_high
-        n_high = int(2*n_high)
-    
         p_high1 = binom.cdf(int(t_green*n_high), n_high, t_green - accuracy)
         p_low1 = binom.cdf(int(t_green*n_low), n_low, t_green - accuracy)
 
         p_high_red = 1 - binom.cdf(int(t_red*n_high), n_high, t_red + accuracy)
         p_low_red = 1 - binom.cdf(int(t_red*n_low), n_low, t_red + accuracy)
-    
-    if np.logical_or(p_high1 <= p - tolerance, p_high_red <= p - tolerance):
-        break
+
+        if np.logical_and(p_high1 < p, p_high_red < p):
+            n_low = n_high
+            n_high = int(2*n_high)
+
+            p_high1 = binom.cdf(int(t_green*n_high), n_high, t_green - accuracy)
+            p_low1 = binom.cdf(int(t_green*n_low), n_low, t_green - accuracy)
+
+            p_high_red = 1 - binom.cdf(int(t_red*n_high), n_high, t_red + accuracy)
+            p_low_red = 1 - binom.cdf(int(t_red*n_low), n_low, t_red + accuracy)
+
+        if np.logical_or(p_high1 <= p - tolerance, p_high_red <= p - tolerance):
+            break
     
     
     
