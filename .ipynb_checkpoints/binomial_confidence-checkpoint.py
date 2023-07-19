@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import binom
+from matplotlib.patches import Rectangle
 
-def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9, tolerance = 0.001, n_high = 10000, n_low = 2, suppress_warnings = False):
+def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9, tolerance = 0.001, n_high = 10000, n_low = 2, suppress_warnings = False, make_plot = False):
     
     '''
     Return the number of samples required to accurately estimate discrepancy scores for discrete variables.
@@ -49,11 +50,60 @@ def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9,
             n_high = n_mid
             p_high_green = binom.cdf(int(t_green*n_high), n_high, t_green - accuracy)
             p_high_red = 1 - binom.cdf(int(t_red*n_high), n_high, t_red + accuracy)
+            
+    if make_plot:
+        schematic(t_green, t_red, accuracy, confidence, n_high, p_high_green, p_high_red)
     
     return n_high
     
     
-def schematic(t_green, t_red, accuracy, confidence, n):
-    
-    plt.figure()
+def schematic(t_green, t_red, accuracy, confidence, n_samples, p_green, p_red):
+
+    fig, ax = plt.subplots(figsize = [20, 4])
+
+    width = 1
+    box_bottom = 1
+    height = 0.1*width
+
+    # Green zone - confidence guarantee
+    left = 0
+    right = t_green - accuracy
+    rect = Rectangle([left, box_bottom], right - left, height, color = 'g')
+    ax.add_patch(rect)
+
+    # Green zone - out of confidence guarantee
+    left = t_green - accuracy
+    right = t_green
+    rect = Rectangle([left, box_bottom], right - left, height, color = 'yellowgreen')
+    ax.add_patch(rect)
+
+    # Yellow zone
+    left = t_green
+    right = t_red
+    rect = Rectangle([left, box_bottom], right - left, height, color = 'yellow')
+    ax.add_patch(rect)
+
+    # Red zone - out of confidence guarantee
+    left = t_red 
+    right = t_red + accuracy
+    rect = Rectangle([left, box_bottom], right - left, height, color = 'orange')
+    ax.add_patch(rect)
+
+    # Red zone - confidence guarantee
+    left = t_red + accuracy
+    right = 1
+    rect = Rectangle([left, box_bottom], right - left, height, color = 'r')
+    ax.add_patch(rect)
+
+    plt.plot([t_green, t_green], [box_bottom - 0.1*height, box_bottom + 1.1*height], color = 'k', linestyle = '--')
+    plt.plot([t_red, t_red], [box_bottom - 0.1*height, box_bottom + 1.1*height], color = 'k', linestyle = '--')
+    plt.yticks([])
+    plt.xticks(np.round([0, t_green - accuracy, t_green, t_red, t_red + accuracy, 1], 2))
+    plt.xlabel('Discrepancy score', fontsize = 15)
+    plt.text(t_green/2, 1.04, 'Green zone\nConfidence guarantee = {0}'.format(np.round(p_green, 5)), fontsize = 15, horizontalalignment = 'center')
+    plt.text((1 + t_red)/2, 1.04, 'Red zone\nconfidence guarantee = {0}'.format(np.round(p_red, 5)), fontsize = 15, horizontalalignment = 'center')
+    plt.ylim([box_bottom, box_bottom + height])
+
+    plt.title('{0} samples'.format(n_samples))
+
     
