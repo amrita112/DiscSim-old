@@ -104,6 +104,6 @@ def schematic(t_green, t_red, accuracy, confidence, n_samples, p_green, p_red):
     plt.text((1 + t_red)/2, 1.04, 'Red zone\nconfidence guarantee = {0}'.format(np.round(p_red, 5)), fontsize = 15, horizontalalignment = 'center')
     plt.ylim([box_bottom, box_bottom + height])
 
-    plt.title('{0} samples'.format(n_samples))
+    plt.title('{0} samples'.format(n_samples), fontsize = 15)
 
     
