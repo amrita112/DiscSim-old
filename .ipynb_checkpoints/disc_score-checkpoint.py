@@ -49,7 +49,8 @@ def bootstrap_distribution(subordinate_variable, supervisor_variable, method, n_
     if ax is None:
         fig, ax = plt.subplots()
     ax.hist(discrepancy_scores, color = 'gray', edgecolor = 'black')
-    ax.axvline(real_discrepancy_score, color='r', linestyle='dashed', linewidth=2)
+    ax.axvline(real_discrepancy_score, color='r', linestyle='dashed', linewidth=2, label = 'True discrepancy score')
+    plt.legend()
     ax.set_xlabel("Discrepancy Score")
     ax.set_ylabel("Frequency")
     ax.set_title("Bootstrap Distribution of Discrepancy Scores")
