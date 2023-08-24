@@ -58,6 +58,20 @@ def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9,
     
     
 def schematic(t_green, t_red, accuracy, confidence, n_samples, p_green, p_red):
+    
+    '''
+    Make a plot showing the number of samples required to accurately estimate discrepancy scores for discrete variables.
+    
+    Inputs:
+    t_green (float between 0 and 1, default 0.3): Threshold for classifying workers in 'green band'. Discrepancy scores < t_green will be classified as green band.
+    t_red (float between 0 and 1, default 0.7): Threshold for classifying workers in 'red band'. Discrepancy scores > t_red will be classified as red band.
+    accuracy (float between 0 and 1, default 0.02): Distance from threshold at which confidence guarantee applies. 
+    confidence (float between 0 and 1, default 0.9): Desired probability of correctly classifying workers as green band or red band.
+    n_samples (int): output of get_n_samples(), number of samples required to accurately estimate discrepancy scores
+    p_green (float, between 0 and 1): Actual probability of correctly classifying workers as green band with n_samples samples.
+    p_red (float, between 0 and 1): Actual probability of correctly classifying workers as red band with n_samples samples.
+    
+    '''
 
     fig, ax = plt.subplots(figsize = [20, 4])
 
