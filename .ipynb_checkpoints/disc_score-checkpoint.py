@@ -3,8 +3,25 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 def discrepancy_score(subordinate_variable, supervisor_variable, method):
-    """Calculates the discrepancy score between two variables."""
-    """The discrepancy score is a measure of the difference between the two variables."""
+    """Calculate the discrepancy score between two variables.
+    The discrepancy score is a measure of the difference between the two variables.
+    
+    Inputs:
+    subordinate_variable (array, float except if method is 'percent_non_match'): values measured by subordinate
+    supervisor_variable (array): must be of same length and datatype as subordinate_variable, values measured by supervisor
+    method (string): One of the following options:
+        1. 'percent_difference': discrepancy score is the signed difference between subordinate and supervisor measurements, as a percentage of the supervisor measurement
+        2. 'absolute_difference': discrepancy score is the absolute difference between subordiante and supervisor measurements
+        3. 'absolute_percent_difference': discrepancy score is the absolute difference between subordinate and supervisor measurements, as a percentage of the supervisor measurement
+        4. 'simple_difference': discrepancy score is the signed difference between subordinate and supervisor measurements
+        5. 'percent_non_match': discrepancy score is the percentage of measurements that are not exactly same between subordinate and supervisor. If method is 'percent_non_match', 
+                                subordinate_variable and supervisor_variable may be of any datatype.
+                                
+    Outputs:
+    discrepancy score (float): Average of discrepancy score for all measurements (except if method is percent_non_match, in which case it is simply the 
+                               percentage of measurements that are not exactly same between subordinate and supervisor).
+    
+    """
     
     # Step 1: check that the two variables are the same length
     if len(subordinate_variable) != len(supervisor_variable):
@@ -32,7 +49,24 @@ def discrepancy_score(subordinate_variable, supervisor_variable, method):
 
 
 def bootstrap_distribution(subordinate_variable, supervisor_variable, method, n_iterations = 100000, ax = None):
-    """Generates a distribution of discrepancy scores between the two variables using bootstrapping."""
+    """Generate a distribution of discrepancy scores between the two variables using bootstrapping.
+    
+    Inputs:
+    subordinate_variable (array, float except if method is 'percent_non_match'): values measured by subordinate
+    supervisor_variable (array): must be of same length and datatype as subordinate_variable, values measured by supervisor
+    method (string): One of the following options:
+        1. 'percent_difference': discrepancy score is the signed difference between subordinate and supervisor measurements, as a percentage of the supervisor measurement
+        2. 'absolute_difference': discrepancy score is the absolute difference between subordiante and supervisor measurements
+        3. 'absolute_percent_difference': discrepancy score is the absolute difference between subordinate and supervisor measurements, as a percentage of the supervisor measurement
+        4. 'simple_difference': discrepancy score is the signed difference between subordinate and supervisor measurements
+        5. 'percent_non_match': discrepancy score is the percentage of measurements that are not exactly same between subordinate and supervisor. If method is 'percent_non_match', 
+                                subordinate_variable and supervisor_variable may be of any datatype.
+    n_iterations (int, default 100000): Number of values in null distribution
+    ax (plt.axes() instance, default None): axes for plotting null distribution
+    
+    Outputs:
+    discrepancy_scores (array of length n_iterations, float): simulated discrepancy scores with random sub-sampling of measurements
+    """
         
     n = len(subordinate_variable)
     discrepancy_scores = []
@@ -58,8 +92,26 @@ def bootstrap_distribution(subordinate_variable, supervisor_variable, method, n_
     return discrepancy_scores
 
 def shuffle_distribution(subordinate_variable, supervisor_variable, method, n_iterations = 100000, ax = None):
-    """Generates a null distribution of discrepancy scores between the two variables 
-    by shuffling indices of the supervisor variable."""
+    """Generate a null distribution of discrepancy scores between the two variables 
+    by shuffling indices of the supervisor variable.
+    
+    Inputs:
+    subordinate_variable:
+    supervisor_variable (array, float): 
+    method (string): One of the following options:
+        1. 'percent_difference': discrepancy score is the signed difference between subordinate and supervisor measurements, as a percentage of the supervisor measurement
+        2. 'absolute_difference': discrepancy score is the absolute difference between subordiante and supervisor measurements
+        3. 'absolute_percent_difference': discrepancy score is the absolute difference between subordinate and supervisor measurements, as a percentage of the supervisor measurement
+        4. 'simple_difference': discrepancy score is the signed difference between subordinate and supervisor measurements
+        5. 'percent_non_match': discrepancy score is the percentage of measurements that are not exactly same between subordinate and supervisor. If method is 'percent_non_match', 
+                                subordinate_variable and supervisor_variable may be of any datatype.
+    n_iterations (int, default 100000): Number of values in null distribution
+    ax (plt.axes() instance, default None): axes for plotting null distribution
+    
+    Outputs:
+    discrepancy_scores (array of length n_iterations, float): simulated discrepancy scores with indices of supervisor variable shuffled 
+    
+    """
         
     n = len(subordinate_variable)
     discrepancy_scores = []
@@ -84,8 +136,17 @@ def shuffle_distribution(subordinate_variable, supervisor_variable, method, n_it
     return discrepancy_scores
 
 def p_value(shuffle_distribution, real_value):
-    """Calculates the p-value of the real discrepancy score: 
-    the proportion of samples in the shuffled distribution that are less than the real discrepancy score."""
+    """Calculate the p-value of the real discrepancy score: 
+    the proportion of samples in the shuffled distribution that are less than the real discrepancy score.
+    
+    Inputs:
+    shuffle_distribution (array, float): discrepancy scores simulated under the null hypothesis
+    real_value (float): observed discrepancy score
+    
+    Output:
+    p_value (float, between 0 and 1): statistical significance of observed discrepancy score under null hypothesis
+    
+    """
     
     p_value = sum(shuffle_distribution <= real_value) / len(shuffle_distribution)
     
