@@ -23,6 +23,10 @@ def discrepancy_score(subordinate_variable, supervisor_variable, method):
     
     """
     
+    # Flatten variable arrays and make sure they are numpy arrays
+    subordinate_variable = np.reshape(subordinate_variable, [-1])
+    supervisor_variable = np.reshape(supervisor_variable, [-1])
+    
     # Step 1: check that the two variables are the same length
     if len(subordinate_variable) != len(supervisor_variable):
         raise ValueError("The two variables must be the same length.")
