@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Calculate required sample size</h1>
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.threshold.label }} <br>
+        {{ form.threshold (size=32) }}
+        {% for error in form.threshold.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+    </p>
+    <p>
+        {{ form.accuracy.label }} <br>
+        {{ form.accuracy (size=32) }}
+        {% for error in form.accuracy.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+    </p>
+    <p>
+        {{ form.confidence.label }} <br>
+        {{ form.confidence (size=32) }}
+        {% for error in form.confidence.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+    </p>
+    <p> {{ form.submit() }} </p>
+</form>
+{% endblock %}
