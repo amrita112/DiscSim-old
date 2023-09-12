@@ -3,10 +3,46 @@ import matplotlib.pyplot as plt
 from scipy.stats import binom
 from matplotlib.patches import Rectangle
 
-def get_n_samples(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9, tolerance = 0.001, n_high = 10000, n_low = 2, suppress_warnings = False, make_plot = False):
+def get_n_samples_single_threshold(threshold, confidence = 0.9, accuracy = 0.02, tolerance = 0.001, n_high = 10000, n_low = 2):
     
     '''
-    Return the number of samples required to accurately estimate discrepancy scores for discrete variables.
+    Return the number of samples required to accurately estimate very high discrepancy scores for discrete variables.
+    
+    Inputs:
+    threshold (float between 0 and 1): Threshold for classifying workers in 'red band'. Discrepancy scores > threshold will be classified as red band.
+    accuracy (float between 0 and 1, default 0.02): Distance from threshold at which confidence guarantee applies. 
+    confidence (float between 0 and 1, default 0.9): Desired probability of correctly classifying workers as red band.
+    tolerance (float between 0 and 1, default 0.001): Distance from desired probability at which binary search of number of samples is stopped.
+    n_high (int, default 10,000): Maximum possible number of samples for initializing binary search
+    n_low (int, default 1): Minimum possible number of samples for initializing binary search
+    
+    '''
+    
+    p_high = 1 - binom.cdf(int(threshold*n_high), n_high, threshold + accuracy) # Probability of classifying score threshold + accuracy as red, with n_high samples
+    p_low = 1 - binom.cdf(int(threshold*n_low), n_low, threshold + accuracy) # Probability of classigying score threshold + accuracy as green, with n_low samples
+
+    if not p_high > confidence:
+        return('Increase n_high')
+    if not p_low < confidence:
+        return('Decrease n_low')
+
+    while np.logical_and(np.abs(p_high - confidence) > tolerance, n_low < n_high - 1):
+
+        n_mid = int((n_high + n_low)/2)
+
+        p_mid = 1 - binom.cdf(int(threshold*n_mid), n_mid, threshold + accuracy)
+        if(p_mid > confidence):
+            n_high = n_mid
+        else:
+            n_low = n_mid
+
+        p_high = 1 - binom.cdf(int(threshold*n_high), n_high, threshold + accuracy)
+        p_low = 1 - binom.cdf(int(threshold*n_low), n_low, threshold + accuracy)
+
+def get_n_samples_two_thresholds(t_green = 0.3, t_red = 0.7, accuracy = 0.02, confidence = 0.9, tolerance = 0.001, n_high = 10000, n_low = 2, suppress_warnings = False, make_plot = False):
+    
+    '''
+    Return the number of samples required to accurately estimate very high and very low discrepancy scores for discrete variables.
     
     Inputs:
     t_green (float between 0 and 1, default 0.3): Threshold for classifying workers in 'green band'. Discrepancy scores < t_green will be classified as green band.
