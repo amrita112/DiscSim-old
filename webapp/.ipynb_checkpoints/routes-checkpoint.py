@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for
 from webapp import webapp
-from webapp.forms import LoginForm
+from webapp.forms import LoginForm, SampleSizeForm
 
 @webapp.route('/') # Decorator that registeres the function as a callback when a web browser requests the URL /
 @webapp.route('/index') # Decorator that registeres the function as a callback when a web browser requests the URL /index
@@ -33,3 +33,9 @@ def login():
             form.username.data, form.remember_me.data))
         return redirect(url_for('index'))
     return render_template('login.html', title = 'Sign in', form = form)
+
+@webapp.route('/sample_size', methods=['GET', 'POST']) # Decorator that registers the function as a callback when a web browser requests the URL /sample_size
+
+def sample_size():
+    form = SampleSizeForm()
+    return render_template('sample_size.html', title = 'Sample size', form = form)
