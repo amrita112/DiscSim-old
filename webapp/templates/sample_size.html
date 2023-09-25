@@ -26,4 +26,11 @@
     </p>
     <p> {{ form.submit() }} </p>
 </form>
+<div>
+{% if output %}
+    <p>{{ output }} samples needed to correctly classify subordinates </p>
+{% else %}
+{% endif %}
+</div>
+
 {% endblock %}
