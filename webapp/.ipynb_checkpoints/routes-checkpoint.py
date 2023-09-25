@@ -46,8 +46,11 @@ def sample_size():
         a = form.accuracy.data
         t = form.threshold.data
         c = form.confidence.data
+        t = form.tolerance.data
+        n_high = form.n_high.data
+        n_low = form.n_low.data
 
-        output = binomial_confidence.get_n_samples_single_threshold(t, accuracy = a, confidence = c)
+        output = binomial_confidence.get_n_samples_single_threshold(t, accuracy = a, confidence = c, tolerance = t, n_high = n_high, n_low = n_low)
         return render_template('sample_size.html', title = 'Sample size', form = form, output = output)
     
     return render_template('sample_size.html', title = 'Sample size', form = form)

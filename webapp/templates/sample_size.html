@@ -24,6 +24,27 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
     </p>
+    <p>
+        {{ form.tolerance.label }} <br>
+        {{ form.tolerance (size=32) }}
+        {% for error in form.confidence.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+    </p>
+    <p>
+        {{ form.n_high.label }} <br>
+        {{ form.n_high (size=32) }}
+        {% for error in form.confidence.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+    </p>
+    <p>
+        {{ form.n_low.label }} <br>
+        {{ form.n_low (size=32) }}
+        {% for error in form.confidence.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+    </p>
     <p> {{ form.submit() }} </p>
 </form>
 <div>

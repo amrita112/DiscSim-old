@@ -18,8 +18,8 @@ def get_n_samples_single_threshold(threshold, confidence = 0.9, accuracy = 0.02,
     
     '''
     
-    p_high = 1 - binom.cdf(int(threshold*n_high), n_high, float(threshold + accuracy)) # Probability of classifying score threshold + accuracy as red, with n_high samples
-    p_low = 1 - binom.cdf(int(threshold*n_low), n_low, float(threshold + accuracy)) # Probability of classigying score threshold + accuracy as green, with n_low samples
+    p_high = 1 - binom.cdf(int(threshold*n_high), n_high, threshold + accuracy) # Probability of classifying score threshold + accuracy as red, with n_high samples
+    p_low = 1 - binom.cdf(int(threshold*n_low), n_low, threshold + accuracy) # Probability of classigying score threshold + accuracy as green, with n_low samples
 
     if not p_high > confidence:
         return('Increase n_high')
