@@ -22,9 +22,9 @@ def get_n_samples_single_threshold(threshold, confidence = 0.9, accuracy = 0.02,
     p_low = 1 - binom.cdf(int(threshold*n_low), n_low, threshold + accuracy) # Probability of classigying score threshold + accuracy as green, with n_low samples
 
     if not p_high > confidence:
-        return('Increase n_high')
+        return('Increase maximum # samples')
     if not p_low < confidence:
-        return('Decrease n_low')
+        return('Decrease minimum # samples')
 
     while np.logical_and(np.abs(p_high - confidence) > tolerance, n_low < n_high - 1):
 

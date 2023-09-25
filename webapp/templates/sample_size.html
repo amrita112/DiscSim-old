@@ -49,8 +49,11 @@
 </form>
 <div>
 {% if output %}
-    <p>{{ output }} samples needed to correctly classify subordinates </p>
-{% else %}
+    {% if output is string %}
+        <p>{{ output }}</p>
+    {% else %}
+        <p>{{ output }} samples needed to correctly classify subordinates </p>
+    {% endif %}
 {% endif %}
 </div>
 
