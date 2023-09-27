@@ -17,7 +17,7 @@ A good starting point is to play with the jupyter notebooks in the Scripts folde
 2. `Sample EDC data analysis.ipynb` uses dummy data from the education sector to calculate discrepancy scores using various methods, and asses the statistical significance of those discrepancy scores.
 3. `sampling_strategy.ipynb` compares random sampling and ranked sampling of beneficiaries for discrepancy score calculation, using two different metrics - accuracy of discrepancy score, and efficacy of catching 'worst offender' subordinates.
 
-To run a jupyter notebook, navigate to the directory containing the cloned repository in the terminal/command prompt. Type in the following commands (make sure you have set up the environment discsim using the .yml file as discussed above):
+To run a jupyter notebook, navigate to the directory containing the cloned repository in the terminal/command prompt. Type in the following commands (make sure you have set up the environment discsim using the `environment.yml` file as discussed above):
 ```python
 >>>conda activate discsim
 >>>jupyter notebook
