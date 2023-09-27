@@ -20,6 +20,7 @@ A good starting point is to play with the jupyter notebooks in the Scripts folde
 To run a jupyter notebook, navigate to the directory containing the cloned repository in the terminal/command prompt. Type in the following commands (make sure you have set up the environment discsim using the .yml file as discussed above):
 
 `conda activate discsim`
+
 `jupyter notebook`
 
 This should open a browser tab in which you can navigate to the Scripts folder and click on any of the jupyter notebooks above to run them. Run the cells in order and make changes in the code to explore (for an introduction to jupyter notebooks, see [this page](https://realpython.com/jupyter-notebook-introduction/) (note that you don't need to install jupyter - it is already installed in the environment discsim).
