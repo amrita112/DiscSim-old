@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, url_for
 from webapp import webapp
 from webapp.forms import LoginForm, SampleSizeForm
 from Scripts import binomial_confidence
+from os.path import sep
 
 @webapp.route('/') # Decorator that registeres the function as a callback when a web browser requests the URL /
 @webapp.route('/index') # Decorator that registeres the function as a callback when a web browser requests the URL /index
@@ -49,8 +50,18 @@ def sample_size():
         t = form.tolerance.data
         n_high = form.n_high.data
         n_low = form.n_low.data
+        make_plot = form.generate_plot.data
 
-        output = binomial_confidence.get_n_samples_single_threshold(t, accuracy = a, confidence = c, tolerance = t, n_high = n_high, n_low = n_low)
-        return render_template('sample_size.html', title = 'Sample size', form = form, output = output)
+        with webapp.app_context():
+            output = binomial_confidence.get_n_samples_single_threshold(t, accuracy = a, confidence = c, tolerance = t, n_high = n_high, n_low = n_low,
+                                                                   make_plot = make_plot, fig_path = 'Plots{0}sample_size'.format(sep))
+        return render_template('sample_size.html', title = 'Sample size', form = form, 
+                               n_high = output['n_high'], message = output['message'], fig_path = output['fig_path'])
     
     return render_template('sample_size.html', title = 'Sample size', form = form)
+
+@webapp.route('/sample_size_schematic/<path:image_path>') # Decorator that registers the function as a callback when a web browser requests the URL /sample_size_schematic
+def serve_image(image_path):
+    # Assuming image_path is a valid path to your image file
+    # Set the appropriate content type for your image (e.g., 'image/png')
+    return send_file(image_path, mimetype='image/png')
