@@ -1,6 +1,6 @@
 # DiscSim
 
-This repository contains code written for a project I am doing as a volunteer with CEGIS (Center for Effective Governance of Indian States), an organization that aims to help state governments in India achieve better development outcomes. 
+This code was written for CEGIS (Center for Effective Governance of Indian States), an organization that aims to help state governments in India achieve better development outcomes. 
 
 An important goal of CEGIS is to improve the quality of administrative data collected by state governments. One way in which this is achieved is to re-sample a subset of the data and measure the deviation from the original samples collected. These deviations are quantified as 'discrepancy scores', and large discrepancy scores are flagged for intervention by a third party.
 
