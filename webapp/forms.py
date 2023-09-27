@@ -36,4 +36,6 @@ class SampleSizeForm(FlaskForm):
     n_low = IntegerField('Minimum # samples', default = 2, validators = [NumberRange(1, 1000000, message = 'Minimum number of samples should be at least 1')], 
                          description = n_low_desc)
     
+    generate_plot = BooleanField('Generate plot?', default = True)
+    
     submit = SubmitField('Generate number of samples')

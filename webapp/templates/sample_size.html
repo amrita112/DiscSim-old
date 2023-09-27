@@ -45,15 +45,24 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
     </p>
+    <p>
+        {{ form.generate_plot.label }} <br>
+        {{ form.generate_plot (size=32) }}
+        {% for error in form.confidence.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+    </p>
     <p> {{ form.submit() }} </p>
 </form>
 <div>
-{% if output %}
-    {% if output is string %}
-        <p>{{ output }}</p>
-    {% else %}
-        <p>{{ output }} samples needed to correctly classify subordinates </p>
-    {% endif %}
+{% if message %}
+    <p>{{ message }}</p>
+{% endif %}
+{% if n_high %}
+    <p>{{ n_high }} samples needed to correctly classify subordinates </p>
+{% endif %}
+{% if fig_path %}
+    <img src="{{ url_for('sample_size_schematic', image_path=fig_path) }}" alt="Image">
 {% endif %}
 </div>
 
