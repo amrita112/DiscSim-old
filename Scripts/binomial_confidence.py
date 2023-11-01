@@ -108,7 +108,7 @@ def get_n_samples_two_thresholds(t_green = 0.3, t_red = 0.7, accuracy = 0.02, co
     return output
     
     
-def schematic_two_thresholds(t_green, t_red, accuracy, confidence, n_samples, p_green, p_red):
+def schematic_two_thresholds(t_green, t_red, accuracy, confidence, n_samples, p_green, p_red, fig_path):
     
     '''
     Make a plot showing the number of samples required to accurately estimate discrepancy scores for discrete variables.
