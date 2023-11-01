@@ -1,6 +1,6 @@
 # DiscSim
 
-This repository contains code written for a project I am doing as a volunteer with CEGIS (Center for Effective Governance of Indian States), an organization that aims to help state governments in India achieve better development outcomes. 
+This code was written for [`CEGIS`](https://www.cegis.org/) (Center for Effective Governance of Indian States), an organization that aims to help state governments in India achieve better development outcomes. 
 
 An important goal of CEGIS is to improve the quality of administrative data collected by state governments. One way in which this is achieved is to re-sample a subset of the data and measure the deviation from the original samples collected. These deviations are quantified as 'discrepancy scores', and large discrepancy scores are flagged for intervention by a third party.
 
@@ -10,35 +10,18 @@ Glossary
 1. Subordinate: collector of original samples
 2. Supervisor: collector of secondary samples (used to calculate discrepancy score)
 
-The work-flow for this project is outlined below: 
+To use the code in this repository, clone the repository and set up the anaconda environment using the `environment.yml` file. You can follow instructions [here](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file:~:text=%2D%2Dhelp.-,Creating%20an%20environment%20from%20an%20environment.yml%20file,-%EF%83%81).
 
-1. Using sample data, calculate different types of discrepancy scores.
-2. Estimate variance of the calculated scores with bootstrapping, and p-values (a measure of our confidence in the score).
-3. Build a simple model to predict the p-value of the score, taking as input
-    a. # of subordinate samples (assuming only 1 subordinate)
-    b. # of supervisor samples (assuming only 1 supervisor)
-    c. # of variables
-    d. Method of truth score calculation
-    e. Expected discrepancies (to be removed later, this shouldn’t be required as input but is hard to estimate, will require some thinking)
-4. Add complexity to the model. 
-    a. Add the following as optional inputs:
-        i. Exact values of subordinate samples (upload csv)
-        ii. Exact values of supervisor samples (upload csv)
-        iii. Mean and variance of subordinate samples
-        iv. Mean and variance of supervisor samples
-        v. Moderation rate (expected change in the variables between subordinate sampling and supervisor sampling)
-    b. Estimate expected discrepancy instead of requiring it as an input from the user
-    c. Give outputs at different scales (state, district, block, subordinate)
-5. Enable multiple subordinates and supervisors: calculate p-values for discrepancy score for each subordinate and overall average p-values. 
-6. Think about how to convert p-value to confidence score that’s interpretable for a layperson
-7. Create a user-friendly web interface 
-8. Implement inverse logic: if you want a particular p-value, what numbers do you need
-9. Supervisor sampling algorithm: add the following as inputs: 
-    a. Supervisor sampling frequency, as a % of subordinate sampling frequency
-    b. Supervisor sampling strategy, for example
-        i. Subordinates with highest variance
-        ii. Subordinates whose mean values are outliers from the distribution of subordinates
-        iii. Random selection of subordinates
-        iv. Specific subordinates
-    c. Attrition: actual sampling frequency, as a % of subordinate sampling frequency or as a % of intended sampling frequency
-10. Add supervisory layers
+A good starting point is to play with the jupyter notebooks in the `Scripts` folder:
+1. `binomial_confidence.ipynb` models discrepancy scores of binary variables as a binomial distribution, and uses the model to predict the number of samples required to confidently classify subordinates into categories based on discrepancy score.
+2. `Sample EDC data analysis.ipynb` uses dummy data from the education sector to calculate discrepancy scores using various methods, and asses the statistical significance of those discrepancy scores.
+3. `sampling_strategy.ipynb` compares random sampling and ranked sampling of beneficiaries for discrepancy score calculation, using two different metrics - accuracy of discrepancy score, and efficacy of catching 'worst offender' subordinates.
+
+To run a jupyter notebook, navigate to the directory containing the cloned repository in the terminal/command prompt. Type in the following commands (make sure you have set up the environment `discsim` using the `environment.yml` file as discussed above):
+```python
+>>>conda activate discsim
+>>>jupyter notebook
+```
+This should open a browser tab in which you can navigate to the `Scripts` folder and click on any of the jupyter notebooks above to run them. Run the cells in order and make changes in the code to explore (for an introduction to jupyter notebooks, see [this page](https://realpython.com/jupyter-notebook-introduction/) (note that you don't need to install jupyter - it is already installed in the environment `discsim`).
+
+< Rakshith created a new branch called Rakshith and is trying to make pull requests > 
